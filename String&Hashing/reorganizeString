@@ -1,0 +1,64 @@
+class Solution {
+    class Pair implements Comparable<Pair>{
+        char ch;
+        int freq;
+
+        Pair(char ch, int freq){
+            this.ch = ch;
+            this.freq  = freq;
+        }
+
+        @Override
+        public int compareTo(Pair other) {
+        return other.freq - this.freq;   
+        }
+    }
+
+    public String reorganizeString(String s) {
+        int freq[] = new int[26];
+
+        for(char ch : s.toCharArray()){
+            freq[ch - 'a']++ ;
+        }
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+
+        for(int i=0; i<26; i++){
+            if(freq[i]>0){
+                pq.offer(new Pair((char)(i+'a'),freq[i]));
+            }
+        }
+
+        StringBuilder ans = new StringBuilder();
+
+        while(pq.size()>1){
+
+            Pair first = pq.remove();
+            Pair second = pq.remove();
+
+            ans.append(first.ch);
+            ans.append(second.ch);
+
+            first.freq--;
+            second.freq--;
+
+            if(first.freq>0)
+                pq.add(first);
+
+            if(second.freq>0)
+                pq.add(second);
+        }
+
+        if(!pq.isEmpty()){
+
+            Pair last = pq.remove();
+
+            if(last.freq>1)
+                return "";
+
+            ans.append(last.ch);
+        }
+
+        return ans.toString();
+    }
+}
