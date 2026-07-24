@@ -1,0 +1,47 @@
+class Solution {
+    static class Pair implements Comparable<Pair> {
+        int num;
+        int freq;
+
+        Pair(int num, int freq) {
+            this.num = num;
+            this.freq = freq;
+        }
+
+        @Override
+        public int compareTo(Pair p2) {
+            if (this.freq != p2.freq) {
+        return this.freq - p2.freq;   // frequency ascending
+    }
+
+    return this.num - p2.num;  // Ascending order
+        }
+    }
+
+    public ArrayList<Integer> topKFreq(int[] arr, int k) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        // Count frequencies
+        for (int num : arr) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        // Max Heap
+        PriorityQueue<Pair> pq = new PriorityQueue<>(Collections.reverseOrder());
+
+        // Add all pairs to heap
+        for (int key : map.keySet()) {
+            pq.offer(new Pair(key, map.get(key)));
+        }
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        // Get top k frequent elements
+        while (k-- > 0) {
+            ans.add(pq.poll().num);
+        }
+
+        return ans;
+    }
+}
